@@ -1,6 +1,7 @@
-const dotenv = require("dotenv");
-dotenv.config();
+const serverConfig = require("./server-config");
+const logger = require("./logger-config");
 
 module.exports = {
-  Port: process.env.PORT || 3000,
+  ServerConfig: serverConfig,
+  Logger: logger,
 };
