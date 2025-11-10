@@ -1,3 +1,4 @@
 /node_modules
 /.env
 /error_log.log
+src/config/config.json
