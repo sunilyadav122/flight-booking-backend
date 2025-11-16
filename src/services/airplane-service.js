@@ -1,4 +1,6 @@
+const { StatusCodes } = require("http-status-codes");
 const { AirplaneRepository } = require("../repositories");
+const ErrorHandler = require("../utils/error");
 
 class AirplaneService {
   constructor() {
@@ -10,7 +12,23 @@ class AirplaneService {
       const response = await this.airplaneRepository.create(data);
       return response;
     } catch (error) {
-      throw error;
+      if (error.name === "SequelizeValidationError") {
+        const explanation = error.errors.map((e) => e.message);
+        throw new ErrorHandler(explanation, StatusCodes.BAD_REQUEST);
+      }
+      throw new ErrorHandler(error.message, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async getAirplanes() {
+    try {
+      const response = await this.airplaneRepository.getAll();
+      return response;
+    } catch (error) {
+      throw new ErrorHandler(
+        error.message || "Failed to fetch all the airplanes.",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }
