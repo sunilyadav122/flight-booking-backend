@@ -31,6 +31,60 @@ class AirplaneService {
       );
     }
   }
+
+  async getAirplane(id) {
+    try {
+      const response = await this.airplaneRepository.get(id);
+      return response;
+    } catch (error) {
+      if (error.statusCode === StatusCodes.NOT_FOUND) {
+        throw new ErrorHandler(
+          "The airplane you requested is not available",
+          StatusCodes.NOT_FOUND
+        );
+      }
+      throw new ErrorHandler(
+        error.message || "Failed to fetch the airplane.",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async destroyAirplane(id) {
+    try {
+      const respone = await this.airplaneRepository.destroy(id);
+      return respone;
+    } catch (error) {
+      if (error.statusCode === StatusCodes.NOT_FOUND) {
+        throw new ErrorHandler(
+          "The airplane you requested to delete is not available",
+          StatusCodes.NOT_FOUND
+        );
+      }
+      throw new ErrorHandler(
+        error.message || "Failed to delete the airplane.",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async updateAirplane(id, data) {
+    try {
+      const response = await this.airplaneRepository.update(id, data);
+      return response;
+    } catch (error) {
+      if (error.statusCode === StatusCodes.NOT_FOUND) {
+        throw new ErrorHandler(
+          "The airplane you requested to update is not available",
+          StatusCodes.NOT_FOUND
+        );
+      }
+      throw new ErrorHandler(
+        error.message || "Failed to update the airplane.",
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 }
 
 module.exports = AirplaneService;
